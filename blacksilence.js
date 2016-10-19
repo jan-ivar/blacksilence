@@ -11,3 +11,11 @@ let black = ({width = 640, height = 480} = {}) => {
   let stream = canvas.captureStream();
   return {track: Object.assign(stream.getVideoTracks()[0], {enabled: false}), stream};
 }
+
+let blackSilence = (...args) => {
+  let {track, stream} = black(...args);
+  return window.MediaStream ? new MediaStream([track, silence()])
+                            : (stream.addTrack(silence()), stream); // Chrome kludge
+};
+
+video.srcObject = blackSilence();
