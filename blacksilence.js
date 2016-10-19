@@ -17,5 +17,3 @@ let blackSilence = (...args) => {
   return window.MediaStream ? new MediaStream([track, silence()])
                             : (stream.addTrack(silence()), stream); // Chrome kludge
 };
-
-video.srcObject = blackSilence();
