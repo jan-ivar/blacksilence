@@ -9,11 +9,7 @@ let black = ({width = 640, height = 480} = {}) => {
   let canvas = Object.assign(document.createElement("canvas"), {width, height});
   canvas.getContext('2d').fillRect(0, 0, width, height);
   let stream = canvas.captureStream();
-  return {track: Object.assign(stream.getVideoTracks()[0], {enabled: false}), stream};
+  return Object.assign(stream.getVideoTracks()[0], {enabled: false});
 }
 
-let blackSilence = (...args) => {
-  let {track, stream} = black(...args);
-  return window.MediaStream ? new MediaStream([track, silence()])
-                            : (stream.addTrack(silence()), stream); // Chrome kludge
-};
+let blackSilence = (...args) => new MediaStream([black(...args), silence()]);
